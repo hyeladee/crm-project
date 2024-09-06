@@ -31,7 +31,14 @@ class Lead(models.Model):
 
     # agent = models.ForeignKey('Agent', on_delete=models.SET_DEFAULT, null=True, default=1) #assuming category 1 is default eg 'no_agent_assigned', or some agent selected randomly or criteria based 
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+    
+
 class Agent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # first_name = models.CharField(max_length=20)
     # last_name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.user.username #.email
