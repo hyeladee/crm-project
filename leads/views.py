@@ -25,3 +25,8 @@ def lead_detail(request, pk):
     return render(request, 'leads/lead_detail.html', context)
     
     # return HttpResponse('Here is the detail view')
+
+
+def lead_create(request):
+    # context = {}
+    return render(request, 'leads/lead_create.html')#, context)
