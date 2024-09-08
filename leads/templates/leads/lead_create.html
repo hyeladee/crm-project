@@ -21,7 +21,13 @@
     <a href='/leads'>Go back to leads</a>
     <hr />
     <h1>Create a new lead</h1>
-    <p>This persons age: {{ lead.age }}</p>
+    <form method='post'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type='submit'>submit</button>
+    </form>
+
+    {% comment %} <p>This persons age: {{ lead.age }}</p> {% endcomment %}
 
     {% comment %} {{ leads }} {% endcomment %}
     {% comment %} {{ age }} {% endcomment %}
