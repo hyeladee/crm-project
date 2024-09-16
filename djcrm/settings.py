@@ -120,8 +120,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIR = [
-    BASE_DIR / 'static'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
 ]
 
 STATIC_ROOT = 'static_root'
@@ -134,3 +134,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'leads.User'
 
 CSRF_TRUSTED_ORIGINS = ['https://localhost:8000']
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
