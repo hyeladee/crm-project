@@ -1,3 +1,5 @@
+from django.core.mail import send_mail
+from django.forms import BaseModelForm
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -5,6 +7,8 @@ from .models import Lead, Agent
 from .forms import LeadForm, LeadModelForm
 
 # Create your views here.
+
+# CLASS BASED VIEWS
 class LandingPageView(TemplateView):
     template_name = 'landing.html'
 
@@ -24,6 +28,16 @@ class LeadCreateView(CreateView):
 
     def get_success_url(self) -> str:
         return reverse('leads:lead-list')
+    
+    def form_valid(self, form) -> HttpResponse:
+        # TODO send email
+        send_mail(
+            subject='A Lead Has Been Crated',
+            message='Go to the site to see the new lead',
+            from_email='test@test.com',
+            recipient_list=['test2@test.com'],
+        )
+        return super(LeadCreateView, self).form_valid(form)
    
 class LeadUpdateView(UpdateView):
     template_name = "leads/lead_update.html"
@@ -43,7 +57,7 @@ class LeadDeleteView(DeleteView):
 
 
 
-
+# FUNCTION BASED VIEWS
 
 def landing_page(request):
     return render(request, 'landing.html')
