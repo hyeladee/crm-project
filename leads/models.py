@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.signals import post_save
 # from django.contrib.auth import get_user_model # using default django user
 from django.contrib.auth.models import AbstractUser # using custom django user
 
@@ -12,13 +13,21 @@ class User(AbstractUser):
 
 # User = get_user_model() # using default django user
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile') # to access user profile as user.profile
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', null=True) # to access user profile as user.profile
+
+    def __str__(self):
+        return self.user.username
+
 class Lead(models.Model):
     # SOURCE_CHOICES = (
     #     ('Youtube', 'Youtube'),
     #     ('Twitter', 'Twitter'),
     #     ('Facebook', 'Facebook'),
     # )
-    
+
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
     age = models.IntegerField(default=0)
@@ -37,8 +46,18 @@ class Lead(models.Model):
 
 class Agent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    organisation = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     # first_name = models.CharField(max_length=20)
     # last_name = models.CharField(max_length=20)
 
     def __str__(self):
         return self.user.username #.email
+    
+
+
+def post_user_created_signal(sender, instance, created, **kwargs):
+    print(instance, created)
+    if created:
+        UserProfile.objects.create(user=instance)
+
+post_save.connect(post_user_created_signal, sender=User) # this will create a user profile for every user created
