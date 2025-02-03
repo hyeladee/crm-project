@@ -11,14 +11,12 @@ class AgentListView(LoginRequiredMixin, generic.ListView):
     context_object_name = 'agents'
 
     def get_queryset(self):
-        return Agent.objects.all()
+        organisation = self.request.user.userprofile
+        return Agent.objects.filter(organisation=organisation)
 
 class AgentCreateView(LoginRequiredMixin, generic.CreateView):
     template_name = "agents/agent_create.html"
     form_class = AgentModelForm
-
-    def get_success_url(self):
-        return reverse('agent:agent-list')
     
     def form_valid(self, form):
         agent = form.save(commit=False)
@@ -26,37 +24,41 @@ class AgentCreateView(LoginRequiredMixin, generic.CreateView):
         agent.save()
         return super(AgentCreateView, self).form_valid(form)
     
-#     def form_valid(self, form) -> HttpResponse:
-#         # TODO send email
-#         send_mail(
-#             subject='A Lead Has Been Crated',
-#             message='Go to the site to see the new lead',
-#             from_email='test@test.com',
-#             recipient_list=['test2@test.com'],
-#         )
-#         return super(LeadCreateView, self).form_valid(form)
+    def get_success_url(self):
+        return reverse('agents:agent-list')
+
 
 class AgentDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "agents/agent_detail.html"
     context_object_name = 'agent'
 
     def get_queryset(self):
-        return Agent.objects.all()
+        organisation = self.request.user.userprofile
+        return Agent.objects.filter(organisation=organisation)
 
 class AgentUpdateView(LoginRequiredMixin, generic.UpdateView):
     template_name = "agents/agent_update.html"
     form_class = AgentModelForm
     # queryset = Lead.objects.all()
-
+    
+    def get_queryset(self):
+        organisation = self.request.user.userprofile
+        return Agent.objects.filter(organisation=organisation)
+    
     def get_success_url(self):
         return reverse('agents:agent-list')
     
-    def get_queryset(self):
-        return Agent.objects.all()
-    
 
-# class LeadDeleteView(LoginRequiredMixin, DeleteView):
-#     template_name = "leads/lead_delete.html"
-#     queryset = Lead.objects.all()
-#     def get_success_url(self) -> str:
-#         return reverse('leads:lead-list')
+class AgentDeleteView(LoginRequiredMixin, generic.DeleteView):
+    template_name = "agents/agent_delete.html"
+    context_object_name = "agent"
+
+    def get_queryset(self):
+        organisation = self.request.user.userprofile
+        return Agent.objects.filter(organisation=organisation)
+    
+    def get_success_url(self):
+        return reverse('agents:agent-list')
+    
+    # def get_success_url(self) -> str:
+    #     return reverse('leads:lead-list')
