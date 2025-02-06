@@ -3,9 +3,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import BaseModelForm
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    TemplateView, ListView, DetailView, CreateView,
+    UpdateView, DeleteView, FormView
+    )
 from .models import Lead, Agent
-from .forms import LeadForm, LeadModelForm, CustomUserCreationForm
+from .forms import LeadForm, LeadModelForm, CustomUserCreationForm, AssignAgentForm
 from agents.mixins import OrganisorAndLoginRequiredMixin
 
 # Create your views here.
@@ -29,11 +32,31 @@ class LeadListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         if user.is_organisor:
-            queryset = Lead.objects.filter(organisation=user.userprofile)
+            queryset = Lead.objects.filter(
+                organisation=user.userprofile,
+                agent__isnull=False
+            )
         else:
-            queryset = Lead.objects.filter(organisation=user.agent.organisation)
+            queryset = Lead.objects.filter(
+                organisation=user.agent.organisation,
+                agent__isnull=False
+            )
             queryset = queryset.filter(agent__user=user)
         return queryset
+    
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        context = super(LeadListView, self).get_context_data(**kwargs)
+        if user.is_organisor:
+            queryset = Lead.objects.filter(
+                organisation=user.userprofile,
+                agent__isnull=True
+            )
+            context.update({
+                "unassigned_leads": queryset
+            })
+        return context
+        
 
 class LeadDetailView(LoginRequiredMixin, DetailView):
     template_name = "leads/lead_detail.html"
@@ -86,7 +109,26 @@ class LeadDeleteView(OrganisorAndLoginRequiredMixin, DeleteView):
     def get_success_url(self) -> str:
         return reverse('leads:lead-list')
 
+class AssignAgentView(OrganisorAndLoginRequiredMixin, FormView):
+    template_name = "leads/assign_agent.html"
+    form_class = AssignAgentForm
 
+    def get_form_kwargs(self, **kwargs):
+        kwargs = super(AssignAgentView, self).get_form_kwargs(**kwargs)
+        kwargs.update({
+            "request": self.request
+        })
+        return kwargs
+
+    def get_success_url(self) -> str:
+        return reverse('leads:lead-list')
+    
+    def form_valid(self, form):
+        agent = form.cleaned_data["agent"]
+        lead = Lead.objects.get(id=self.kwargs["pk"])
+        lead.agent = agent
+        lead.save()
+        return super(AssignAgentView, self).form_valid(form)
 
 
 # FUNCTION BASED VIEWS
