@@ -80,6 +80,10 @@ class LeadCreateView(OrganisorAndLoginRequiredMixin, CreateView):
     
     def form_valid(self, form) -> HttpResponse:
         # TODO send email
+        lead = form.save(commit=False)
+        lead.organisation = self.request.user.userprofile
+        lead.save()
+        
         send_mail(
             subject='A Lead Has Been Crated',
             message='Go to the site to see the new lead',

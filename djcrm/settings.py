@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-l96_8oloe9m5sr*1p2nnmksw4-e=jm3)3)%-bz8ywf-8m!zh!z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -38,8 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    # Local apps
     'leads.apps.LeadsConfig',
     'agents.apps.AgentsConfig',
+
+    # Third party apps
+    'crispy_forms',
+    'crispy_tailwind',
 ]
 
 MIDDLEWARE = [
@@ -136,10 +141,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'leads.User'
 
 LOGIN_REDIRECT_URL = '/leads'
-
+LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # CSRF_TRUSTED_ORIGINS = ['https://localhost:8000']
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'tailwind'
+CRISPY_TEMPLATE_PACK = 'tailwind'
