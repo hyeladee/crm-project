@@ -8,35 +8,26 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 
 # Install system dependencies
-# RUN apt-get update && apt-get install -y gcc libpq-dev curl
 RUN apt-get update && apt-get install -y gcc libpq-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Install pipenv
-RUN pip install pipenv
-
-# Copy Pipenv files first
-COPY Pipfile .
-COPY Pipfile.lock .
-
-# Install Python packages to /install directory
-RUN pipenv lock --requirements > requirements.txt
-RUN mkdir /install
-RUN pip install --prefix=/install -r requirements.txt
-
+# Copy project files
+COPY . .
 
 # ----------- Stage 2: Production Image -----------
 FROM python:3.13.3-slim
 
 WORKDIR /app
 
-# Copy installed Python packages
-COPY --from=builder /install /usr/local
-
 # Install system runtime dependencies
-# RUN apt-get update && apt-get install -y libpq-dev curl
-RUN apt-get update && apt-get install -y gcc libpq-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libpq-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Copy installed Python packages from builder stage
+COPY --from=builder /usr/local /usr/local
 
 # Copy app source code
 COPY . .
