@@ -1,7 +1,6 @@
 # ----------- Stage 1: Build Environment -----------
 FROM python:3.13.3-slim as builder
 
-# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
@@ -26,14 +25,14 @@ FROM python:3.13.3-slim
 
 WORKDIR /app
 
-# Install system runtime dependencies
+# Install runtime dependencies
 RUN apt-get update && apt-get install -y libpq-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy installed Python packages from builder stage
+# Copy installed packages from builder
 COPY --from=builder /usr/local /usr/local
 
 # Copy app source code
-COPY . .
+COPY --from=builder /app /app
 
 # Expose port
 EXPOSE 8000
