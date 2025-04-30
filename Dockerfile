@@ -18,6 +18,9 @@ RUN pip install -r requirements.txt
 # Copy project files
 COPY . .
 
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
 # ----------- Stage 2: Production Image -----------
 FROM python:3.13.3-slim
 
