@@ -4,7 +4,7 @@
 A full-stack Customer Relationship Management (CRM) system built with Django and Tailwind, containerized with Docker, and deployed to Render.  
 Manage leads, track interactions, and view analytics—all in a responsive, secure web app. <br>
 
-Checkout live project here: https://crm-project-c15v.onrender.com
+Checkout live project here: [CRM Project](https://crm-project-c15v.onrender.com)
 
 ---
 
