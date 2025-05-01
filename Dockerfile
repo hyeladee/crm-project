@@ -22,7 +22,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Run database migrations
-RUN python manage.py migrate --noinput
+# RUN python manage.py migrate --noinput
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
