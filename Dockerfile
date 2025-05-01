@@ -42,7 +42,7 @@ COPY --from=builder /usr/local /usr/local
 COPY --from=builder /app /app
 
 # Set environment variable to let Django know it's in production
-ENV DJANGO_SETTINGS_MODULE=your_project.settings.production
+ENV DJANGO_SETTINGS_MODULE=djcrm.settings.production
 
 # Expose port
 EXPOSE 8000
