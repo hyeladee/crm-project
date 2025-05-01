@@ -22,10 +22,10 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Run database migrations
-RUN python manage.py migrate --noinput
+# RUN python manage.py migrate --noinput
 
 # Collect static files
-RUN python manage.py collectstatic --noinput
+# RUN python manage.py collectstatic --noinput
 
 # ----------- Stage 2: Production Image -----------
 FROM python:3.13.3-slim
@@ -48,4 +48,5 @@ ENV DJANGO_SETTINGS_MODULE=your_project.settings.production
 EXPOSE 8000
 
 # Run app with Uvicorn
-CMD ["uvicorn", "djcrm.asgi:application", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && uvicorn djcrm.asgi:application --host 0.0.0.0 --port 8000"]
+# CMD ["uvicorn", "djcrm.asgi:application", "--host", "0.0.0.0", "--port", "8000"]
