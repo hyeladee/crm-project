@@ -10,10 +10,10 @@ crispy-tailwind = "*"
 uvicorn = "*"
 dj-database-url = "*"
 whitenoise = {extras = ["brotli"], version = "*"}
-psycopg = {extras = ["binary"], version = "*"}
+#psycopg = {extras = ["binary"], version = "*"}
 python-dotenv = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.13"
+python_version = "3.12"
