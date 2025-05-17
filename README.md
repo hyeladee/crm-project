@@ -6,6 +6,11 @@ Manage leads, track interactions, and view analytics—all in a responsive, secu
 
 Checkout live project here: [CRM Project](https://crm-project-c15v.onrender.com)
 
+NOTE DOR LIVE DEMO
+* For full access demo, use admin as username and password
+* If you create your own user using signup, it will automatically be an agent. Only an admin or manager can upgrade the agent to an admin/manager role
+* Don't use real information when registering as this is a demo app. However, even if you do, be rest assured that data is not retained for long (until server shuts down which happens whenever there is inactivity)
+
 ---
 
 ## 🔍 Features
