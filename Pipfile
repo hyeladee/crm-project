@@ -10,8 +10,8 @@ crispy-tailwind = "*"
 uvicorn = "*"
 dj-database-url = "*"
 whitenoise = {extras = ["brotli"], version = "*"}
-#psycopg = {extras = ["binary"], version = "*"}
 python-dotenv = "*"
+resend = "*"
 
 [dev-packages]
 

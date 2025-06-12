@@ -1,3 +1,6 @@
 npx @tailwindcss/cli -i ./static/css/tailwind-input.css -o ././static/css/tailwind-output.css --watch
 
 npx @tailwindcss/cli -i ./static/css/tailwind-input.css -o ././static/css/tailwind-output.css --minify
+
+
+mailgun = re_DLLRMeSD_6cwMYkHHGHcroAJsBAdd4Zif
